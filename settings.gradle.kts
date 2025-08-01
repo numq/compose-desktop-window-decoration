@@ -1,4 +1,4 @@
-rootProject.name = "compose-desktop-decoration"
+rootProject.name = "compose-desktop-window-decoration"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

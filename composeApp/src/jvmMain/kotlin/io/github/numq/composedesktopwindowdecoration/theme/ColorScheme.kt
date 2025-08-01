@@ -1,4 +1,4 @@
-package io.github.numq.composedesktopdecoration.theme
+package io.github.numq.composedesktopwindowdecoration.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme

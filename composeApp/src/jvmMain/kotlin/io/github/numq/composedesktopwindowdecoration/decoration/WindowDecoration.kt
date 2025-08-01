@@ -1,4 +1,4 @@
-package io.github.numq.composedesktopdecoration.decoration
+package io.github.numq.composedesktopwindowdecoration.decoration
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

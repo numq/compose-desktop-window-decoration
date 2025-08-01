@@ -1,4 +1,4 @@
-package io.github.numq.composedesktopdecoration.application
+package io.github.numq.composedesktopwindowdecoration.application
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
-import io.github.numq.composedesktopdecoration.decoration.WindowDecoration
-import io.github.numq.composedesktopdecoration.decoration.WindowDecorationColors
-import io.github.numq.composedesktopdecoration.theme.CustomTheme
+import io.github.numq.composedesktopwindowdecoration.decoration.WindowDecoration
+import io.github.numq.composedesktopwindowdecoration.decoration.WindowDecorationColors
+import io.github.numq.composedesktopwindowdecoration.theme.CustomTheme
 import kotlin.system.exitProcess
 
-private const val APP_NAME = "Compose desktop decoration"
+private const val APP_NAME = "Compose desktop window decoration"
 
 private val minWindowSize = DpSize(768.dp, 512.dp)
 

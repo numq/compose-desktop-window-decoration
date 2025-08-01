@@ -35,11 +35,11 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "io.github.numq.composedesktopdecoration.application.ApplicationKt"
+        mainClass = "io.github.numq.composedesktopwindowdecoration.application.ApplicationKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
-            packageName = "io.github.numq.composedesktopdecoration"
+            packageName = "io.github.numq.composedesktopwindowdecoration"
             packageVersion = "1.0.0"
         }
     }
