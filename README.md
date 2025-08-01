@@ -1,4 +1,4 @@
-# Compose Desktop Custom Window
+# Compose desktop window decoration
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Compose](https://img.shields.io/badge/compose%20desktop-1.8.2-blue)](https://www.jetbrains.com/lp/compose-mpp/)
