@@ -3,11 +3,11 @@ package io.github.numq.composedesktopwindowdecoration.application
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,7 +52,8 @@ fun main() = application {
             },
             content = {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(), contentColor = MaterialTheme.colorScheme.surface
+                    modifier = Modifier.fillMaxSize(),
+                    backgroundColor = MaterialTheme.colorScheme.background
                 ) { paddingValues ->
                     Column(
                         modifier = Modifier.fillMaxSize().padding(paddingValues),
