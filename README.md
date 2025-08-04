@@ -10,19 +10,28 @@ over window chrome while maintaining native functionality.
 
 ## Key Features
 
-- 🖼️ **Custom title bar** with:
-    - Draggable area
-    - Double-click to maximize
-    - Themed controls
-- 🎨 **Material 3 ready**:
-    - Light/dark mode support
+- 🖼️ **Complete Window Customization**
+    - Fully customizable title bar with draggable area
+    - Double-click to maximize/restore
+    - Themed window controls
+    - Flexible layout options
+
+- 🎨 **Material Design Integration**
+    - Built-in light/dark theme support
     - Custom color schemes
-- ⚙️ **Window controls**:
+    - Adaptive icon colors
+
+- ⚙️ **Enhanced Window Controls**
+    - Standard buttons (minimize/maximize/close)
     - Theme switcher
-    - Minimize/maximize/close
-- 🖱️ **Native integration**:
-    - Smooth dragging
+    - Custom controls section
+    - Responsive layout
+
+- 🖱️ **Native Behavior**
+    - Smooth window dragging
     - DPI-aware scaling
+    - Full multi-monitor support
+    - Window state management
 
 ## Installation
 
@@ -42,74 +51,93 @@ over window chrome while maintaining native functionality.
 
 ## Basic usage
 
-> [!IMPORTANT]
-> `WindowDecoration` content area has a transparent background by default, so you must explicitly set the background
-> color
-
 ```kotlin
 WindowDecoration(
-    minWindowSize = minWindowSize,
-    decorationHeight = decorationHeight,
-    windowDecorationColors = WindowDecorationColors(
-        surface = MaterialTheme.colorScheme.surface,
-        switchSchemeButton = MaterialTheme.colorScheme.primary,
-        minimizeButton = MaterialTheme.colorScheme.primary,
-        fullscreenButton = MaterialTheme.colorScheme.primary,
-        closeButton = MaterialTheme.colorScheme.primary
-    ),
     isDarkTheme = isDarkTheme,
-    setIsDarkTheme = setIsDarkTheme,
-    close = { exitProcess(0) },
-    decoration = {
-        Text(APP_NAME, color = MaterialTheme.colorScheme.primary)
-    },
-    content = {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            backgroundColor = MaterialTheme.colorScheme.background // Set background explicitly
-        ) { paddingValues ->
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                // Your content is here
-            }
-        }
-    })
-
-WindowDecoration(
-    minWindowSize = minWindowSize,
-    decorationHeight = decorationHeight,
+    setIsDarkTheme = { isDarkTheme = it },
+    windowDecorationHeight = 48.dp,
     windowDecorationColors = WindowDecorationColors(
-        surface = MaterialTheme.colorScheme.surface,
-        switchSchemeButton = MaterialTheme.colorScheme.primary,
-        // ...
+        decoration = { MaterialTheme.colorScheme.surface },
+        content = { MaterialTheme.colorScheme.background },
+        switchSchemeButton = { MaterialTheme.colorScheme.primary },
+        minimizeButton = { MaterialTheme.colorScheme.primary },
+        fullscreenButton = { MaterialTheme.colorScheme.primary },
+        closeButton = { MaterialTheme.colorScheme.error }
     ),
-    isDarkTheme = isDarkTheme,
-    setIsDarkTheme = setIsDarkTheme,
-    close = { exitProcess(0) },
-    decoration = {
-        Text("Your application name", color = MaterialTheme.colorScheme.primary)
+    title = {
+        Text("My Application", color = MaterialTheme.colorScheme.primary)
     },
-    content = { windowState ->
-        Surface(
-            color = MaterialTheme.colorScheme.background // Set background color
-        ) {
-            YourContent(windowState)
+    content = { windowState: WindowDecorationState ->
+        // Main application content
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Text("Hello World!", 
+                style = MaterialTheme.typography.displayMedium)
         }
     }
 )
 ```
 
-> [!TIP]
-> Use `WindowState` to access the current state of a window
-
 ## Customization
 
-Hide controls:
+### WindowDecorationColors
 
-  ```kotlin
-  WindowDecorationColors(
-    closeButton = Color.Unspecified // Hides button
+Customize colors for different parts of the window:
+
+```kotlin
+windowDecorationColors = WindowDecorationColors().copy(
+    decoration = { Color(0xFF2E3440) },         // Window decoration background
+    content = { Color(0xFF3B4252) },            // Content area background
+    switchSchemeButton = { Color.Unspecified }, // Hide button
+    closeButton = { Color.Red }                 // Make close button red
 )
-  ```
+```
+
+### Window State
+
+Access window state in your content:
+
+```kotlin
+content = { windowState: WindowDecorationState ->
+    if (windowState.isFullscreen) {
+        FullscreenContent()
+    } else {
+        NormalContent()
+    }
+}
+```
+
+### Custom Controls
+
+Add your own controls:
+
+```kotlin
+controls = {
+    Box(
+        modifier = Modifier.fillMaxHeight().aspectRatio(1f).clickable {
+            /* handle action */
+        }, contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            Icons.Default.Settings, null, tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+```
+
+### Window Parameters
+
+Control window behavior:
+
+```kotlin
+WindowDecoration(
+    initialWindowPosition = WindowPosition(100.dp, 100.dp),
+    initialWindowSize = DpSize(800.dp, 600.dp),
+    minimumWindowSize = DpSize(400.dp, 300.dp),
+    isResizable = true,
+    isAlwaysOnTop = false,
+    // ...
+)
+```
 
 ## Example
 

@@ -3,7 +3,6 @@ package io.github.numq.composedesktopwindowdecoration.application
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -18,13 +17,10 @@ import androidx.compose.ui.window.application
 import io.github.numq.composedesktopwindowdecoration.decoration.WindowDecoration
 import io.github.numq.composedesktopwindowdecoration.decoration.WindowDecorationColors
 import io.github.numq.composedesktopwindowdecoration.theme.CustomTheme
-import kotlin.system.exitProcess
 
 private const val APP_NAME = "Compose desktop window decoration"
 
-private val minWindowSize = DpSize(768.dp, 512.dp)
-
-private val decorationHeight = 32.dp
+private val minimumWindowSize = DpSize(768.dp, 512.dp)
 
 fun main() = application {
     val isSystemInDarkTheme = isSystemInDarkTheme()
@@ -35,67 +31,73 @@ fun main() = application {
 
     CustomTheme(isDarkTheme = isDarkTheme) {
         WindowDecoration(
-            minWindowSize = minWindowSize,
-            decorationHeight = decorationHeight,
-            windowDecorationColors = WindowDecorationColors(
-                surface = MaterialTheme.colorScheme.surface,
-                switchSchemeButton = MaterialTheme.colorScheme.primary,
-                minimizeButton = MaterialTheme.colorScheme.primary,
-                fullscreenButton = MaterialTheme.colorScheme.primary,
-                closeButton = MaterialTheme.colorScheme.primary
-            ),
             isDarkTheme = isDarkTheme,
             setIsDarkTheme = setIsDarkTheme,
-            close = { exitProcess(0) },
-            decoration = {
+            initialWindowSize = minimumWindowSize,
+            minimumWindowSize = minimumWindowSize,
+            title = {
                 Text(APP_NAME, color = MaterialTheme.colorScheme.primary)
             },
             content = {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                ) { paddingValues ->
+                val windowDecorationColors = remember { WindowDecorationColors() }
+
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(paddingValues),
+                        modifier = Modifier.width(IntrinsicSize.Max),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(space = 8.dp, alignment = Alignment.CenterVertically)
                     ) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = 8.dp, alignment = Alignment.CenterHorizontally
-                            ), verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Toggle light-on-dark color scheme", color = MaterialTheme.colorScheme.primary)
-                            Icon(Icons.Default.LightMode, null, tint = MaterialTheme.colorScheme.primary)
-                            Icon(Icons.Default.DarkMode, null, tint = MaterialTheme.colorScheme.primary)
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = 8.dp, alignment = Alignment.CenterHorizontally
-                            ), verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Minimize window", color = MaterialTheme.colorScheme.primary)
-                            Icon(Icons.Default.Minimize, null, tint = MaterialTheme.colorScheme.primary)
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = 8.dp, alignment = Alignment.CenterHorizontally
+                            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(
+                                space = 32.dp, alignment = Alignment.CenterHorizontally
                             ), verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                "Toggle fullscreen window mode",
-                                color = MaterialTheme.colorScheme.primary
+                                "Toggle light-on-dark color scheme", color = windowDecorationColors.switchSchemeButton()
                             )
-                            Icon(Icons.Default.Fullscreen, null, tint = MaterialTheme.colorScheme.primary)
-                            Icon(Icons.Default.FullscreenExit, null, tint = MaterialTheme.colorScheme.primary)
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    space = 8.dp, alignment = Alignment.CenterHorizontally
+                                )
+                            ) {
+                                windowDecorationColors.switchSchemeButton().let { tint ->
+                                    Icon(Icons.Default.LightMode, null, tint = tint)
+                                    Icon(Icons.Default.DarkMode, null, tint = tint)
+                                }
+                            }
                         }
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = 8.dp, alignment = Alignment.CenterHorizontally
-                            ), verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Close window", color = MaterialTheme.colorScheme.primary)
-                            Icon(Icons.Default.Close, null, tint = MaterialTheme.colorScheme.primary)
+                            Text("Minimize window", color = windowDecorationColors.minimizeButton())
+                            Icon(Icons.Default.Minimize, null, tint = windowDecorationColors.minimizeButton())
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Toggle fullscreen window mode", color = windowDecorationColors.fullscreenButton())
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    space = 8.dp, alignment = Alignment.CenterHorizontally
+                                )
+                            ) {
+                                windowDecorationColors.fullscreenButton().let { tint ->
+                                    Icon(Icons.Default.Fullscreen, null, tint = tint)
+                                    Icon(Icons.Default.FullscreenExit, null, tint = tint)
+                                }
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Close window", color = windowDecorationColors.closeButton())
+                            Icon(Icons.Default.Close, null, tint = windowDecorationColors.closeButton())
                         }
                     }
                 }
