@@ -51,6 +51,10 @@ over window chrome while maintaining native functionality.
 
 ## Basic usage
 
+> [!IMPORTANT]
+> If you use `SwingPanel`, some components may not be compatible with a transparent window - in this case the background
+> remains transparent or flickers. Use the `isTransparent = false` flag.
+
 ```kotlin
 WindowDecoration(
     isDarkTheme = isDarkTheme,
@@ -70,8 +74,10 @@ WindowDecoration(
     content = { windowState: WindowDecorationState ->
         // Main application content
         Surface(modifier = Modifier.fillMaxSize()) {
-            Text("Hello World!", 
-                style = MaterialTheme.typography.displayMedium)
+            Text(
+                "Hello World!",
+                style = MaterialTheme.typography.displayMedium
+            )
         }
     }
 )
