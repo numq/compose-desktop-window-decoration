@@ -5,9 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -196,109 +196,118 @@ fun ApplicationScope.WindowDecoration(
             }
         }
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier.fillMaxWidth().height(windowDecorationHeight)
-                    .background(windowDecorationColors.decoration()).pointerInput(Unit) {
-                        detectTapGestures(onDoubleTap = {
-                            isFullscreen = !isFullscreen
-                        })
-                    }.pointerInput(Unit) {
-                        var dragOffset = Offset.Zero
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val contentHeight = remember(maxHeight, windowDecorationHeight) { maxHeight - windowDecorationHeight }
 
-                        detectDragGestures(onDragStart = { initialOffset ->
-                            lastWindowLocation = window.location
-
-                            dragOffset = initialOffset
-                        }, onDragCancel = {
-                            lastWindowLocation?.let { location ->
-                                window.location = location
-                            }
-                        }, onDragEnd = {
-                            lastWindowLocation = window.location
-                        }) { change, _ ->
-                            val dx = (change.position.x - dragOffset.x).roundToInt()
-
-                            val dy = (change.position.y - dragOffset.y).roundToInt()
-
-                            SwingUtilities.invokeLater {
-                                window.location = window.location.apply { translate(dx, dy) }
-                            }
-                        }
-                    }, horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 Row(
-                    modifier = Modifier.weight(1f).padding(start = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    title()
-                }
-                Row(
-                    modifier = Modifier.weight(1f).padding(start = 8.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    controls()
-
-                    windowDecorationColors.switchSchemeButton().takeIf(Color::isSpecified)?.let { tint ->
-                        Box(
-                            modifier = Modifier.aspectRatio(1f).clickable {
-                                setIsDarkTheme(!isDarkTheme)
-                            }, contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                if (isDarkTheme) Icons.Default.LightMode else Icons.Default.DarkMode,
-                                null,
-                                tint = tint
-                            )
-                        }
-                    }
-
-                    windowDecorationColors.minimizeButton().takeIf(Color::isSpecified)?.let { tint ->
-                        Box(
-                            modifier = Modifier.aspectRatio(1f).clickable {
-                                SwingUtilities.invokeLater {
-                                    window.extendedState = Frame.ICONIFIED
-                                }
-                            }, contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Minimize, null, tint = tint
-                            )
-                        }
-                    }
-
-                    windowDecorationColors.fullscreenButton().takeIf(Color::isSpecified)?.let { tint ->
-                        Box(
-                            modifier = Modifier.aspectRatio(1f).clickable {
+                    modifier = Modifier.fillMaxWidth().height(windowDecorationHeight)
+                        .background(windowDecorationColors.decoration()).pointerInput(Unit) {
+                            detectTapGestures(onDoubleTap = {
                                 isFullscreen = !isFullscreen
-                            }, contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                if (isFullscreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
-                                null,
-                                tint = tint
-                            )
-                        }
-                    }
+                            })
+                        }.pointerInput(Unit) {
+                            var dragOffset = Offset.Zero
 
-                    windowDecorationColors.closeButton().takeIf(Color::isSpecified)?.let { tint ->
-                        Box(
-                            modifier = Modifier.aspectRatio(1f).clickable {
-                                onCloseRequest()
-                            }, contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Close, null, tint = tint
-                            )
+                            detectDragGestures(onDragStart = { initialOffset ->
+                                lastWindowLocation = window.location
+
+                                dragOffset = initialOffset
+                            }, onDragCancel = {
+                                lastWindowLocation?.let { location ->
+                                    window.location = location
+                                }
+                            }, onDragEnd = {
+                                lastWindowLocation = window.location
+                            }) { change, _ ->
+                                val dx = (change.position.x - dragOffset.x).roundToInt()
+
+                                val dy = (change.position.y - dragOffset.y).roundToInt()
+
+                                SwingUtilities.invokeLater {
+                                    window.location = window.location.apply { translate(dx, dy) }
+                                }
+                            }
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f).padding(start = 8.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        title()
+                    }
+                    Row(
+                        modifier = Modifier.weight(1f).padding(start = 8.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        controls()
+
+                        windowDecorationColors.switchSchemeButton().takeIf(Color::isSpecified)?.let { tint ->
+                            Box(
+                                modifier = Modifier.aspectRatio(1f).clickable {
+                                    setIsDarkTheme(!isDarkTheme)
+                                }, contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    if (isDarkTheme) Icons.Default.LightMode else Icons.Default.DarkMode,
+                                    null,
+                                    tint = tint
+                                )
+                            }
+                        }
+
+                        windowDecorationColors.minimizeButton().takeIf(Color::isSpecified)?.let { tint ->
+                            Box(
+                                modifier = Modifier.aspectRatio(1f).clickable {
+                                    SwingUtilities.invokeLater {
+                                        window.extendedState = Frame.ICONIFIED
+                                    }
+                                }, contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Minimize, null, tint = tint
+                                )
+                            }
+                        }
+
+                        windowDecorationColors.fullscreenButton().takeIf(Color::isSpecified)?.let { tint ->
+                            Box(
+                                modifier = Modifier.aspectRatio(1f).clickable {
+                                    isFullscreen = !isFullscreen
+                                }, contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    if (isFullscreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
+                                    null,
+                                    tint = tint
+                                )
+                            }
+                        }
+
+                        windowDecorationColors.closeButton().takeIf(Color::isSpecified)?.let { tint ->
+                            Box(
+                                modifier = Modifier.aspectRatio(1f).clickable {
+                                    onCloseRequest()
+                                }, contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Close, null, tint = tint
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            Box(modifier = Modifier.fillMaxSize().background(windowDecorationColors.content())) {
-                content(window, state)
+                Box(
+                    modifier = Modifier.fillMaxWidth().height(contentHeight)
+                        .background(windowDecorationColors.content())
+                ) {
+                    content(window, state)
+                }
             }
         }
     }
