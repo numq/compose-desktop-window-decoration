@@ -13,7 +13,7 @@
 
 </div>
 
-![Preview](media/preview.png)
+<p align="center"><img align="center" src="media/preview.png" alt="preview"></p>
 
 A template for creating custom window decorations in Jetpack Compose Desktop applications. Provides complete control
 over window chrome while maintaining native functionality.
