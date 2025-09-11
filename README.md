@@ -49,37 +49,55 @@ over window chrome while maintaining native functionality.
 - [WindowDecorationState.kt](composeApp/src/jvmMain/kotlin/io/github/numq/composedesktopwindowdecoration/decoration/WindowDecorationState.kt) -
   Window state
 
-## Basic usage
+## Usage
 
 > [!IMPORTANT]
 > If you use `SwingPanel`, some components may not be compatible with a transparent window - in this case the background
 > remains transparent or flickers. Use the `isTransparent = false` flag.
 
 ```kotlin
-WindowDecoration(
-    isDarkTheme = isDarkTheme,
-    setIsDarkTheme = { isDarkTheme = it },
-    windowDecorationHeight = 48.dp,
-    windowDecorationColors = WindowDecorationColors(
-        decoration = { MaterialTheme.colorScheme.surface },
-        content = { MaterialTheme.colorScheme.background },
-        switchSchemeButton = { MaterialTheme.colorScheme.primary },
-        minimizeButton = { MaterialTheme.colorScheme.primary },
-        fullscreenButton = { MaterialTheme.colorScheme.primary },
-        closeButton = { MaterialTheme.colorScheme.error }
+@Composable
+fun ApplicationScope.WindowDecoration(
+    isDarkTheme: Boolean,
+    setIsDarkTheme: (Boolean) -> Unit = {},
+    title: String = "Untitled", /** Application name in the taskbar */
+    icon: Painter? = null,      /** Application icon in the taskbar */
+    windowDecorationHeight: Dp = 32.dp,
+    windowDecorationColors: WindowDecorationColors = WindowDecorationColors(
+        decoration = {
+            MaterialTheme.colorScheme.surface
+        },
+        content = {
+            MaterialTheme.colorScheme.background
+        },
+        switchSchemeButton = {
+            MaterialTheme.colorScheme.primary
+        },
+        minimizeButton = {
+            MaterialTheme.colorScheme.primary
+        },
+        fullscreenButton = {
+            MaterialTheme.colorScheme.primary
+        },
+        closeButton = {
+            MaterialTheme.colorScheme.primary
+        },
     ),
-    title = {
-        Text("My Application", color = MaterialTheme.colorScheme.primary)
-    },
-    content = { windowState: WindowDecorationState ->
-        // Main application content
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Text(
-                "Hello World!",
-                style = MaterialTheme.typography.displayMedium
-            )
-        }
-    }
+    initialWindowPosition: WindowPosition? = null,
+    initialWindowSize: DpSize? = null,
+    minimumWindowSize: DpSize? = null,
+    isVisible: Boolean = true,
+    isTransparent: Boolean = true,
+    isResizable: Boolean = true,
+    isEnabled: Boolean = true,
+    isFocusable: Boolean = true,
+    isAlwaysOnTop: Boolean = false,
+    onPreviewKeyEvent: (KeyEvent) -> Boolean = { false },
+    onKeyEvent: (KeyEvent) -> Boolean = { false },
+    onCloseRequest: () -> Unit = ::exitApplication,
+    titleContent: @Composable RowScope.() -> Unit,          /** Left side of the top panel */
+    controlsContent: @Composable RowScope.() -> Unit = {},  /** Right side of the top panel */
+    windowContent: @Composable (ComposeWindow.(WindowDecorationState) -> Unit),
 )
 ```
 
@@ -91,10 +109,10 @@ Customize colors for different parts of the window:
 
 ```kotlin
 windowDecorationColors = WindowDecorationColors().copy(
-    decoration = { Color(0xFF2E3440) },         // Window decoration background
-    content = { Color(0xFF3B4252) },            // Content area background
-    switchSchemeButton = { Color.Unspecified }, // Hide button
-    closeButton = { Color.Red }                 // Make close button red
+    decoration = { Color(0xFF2E3440) },         /** Window decoration background */
+    content = { Color(0xFF3B4252) },            /** Content area background */
+    switchSchemeButton = { Color.Unspecified }, /** Hide button */
+    closeButton = { Color.Red }                 /** Make close button red */
 )
 ```
 
